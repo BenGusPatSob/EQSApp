@@ -1,49 +1,21 @@
 import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef} from "react";
 import * as d3 from "d3";
+import initState from "../Store/initialState";
 
 const DwgPad = forwardRef((data, referencia) => {
-    const {valorparahijo, recogeDatoDesdeD3js} = data.data;
-    const [datos, setDataset] = useState(valorparahijo);
+    const {valorDesdePadre, enviaDatosAlPadre} = data.data;
+    const [datosPadre, setDataset] = useState(valorDesdePadre);
     const refToSvg = useRef();
   
-    const height = 500;
-    const width = 150;
+    const { Width_dwgPad: width, Height_dwgPad: height } = initState.VariablesModo.Height_dwgPad;
+    //const {height, width} = valorDesdePadre;
   
-    //Para recibir la orden de actualización desde el padre de manera imperativa
+    //Actualización desde el padre (DwgPadWrapper)
     useImperativeHandle(referencia, () => { return {actualizaDatos}})
   
-    const actualizaDatos = (datosNuevos) => {
-      setDataset(datosNuevos);
-    }
+    const actualizaDatos = (datosNuevos) => { setDataset(datosNuevos); }
   
     useEffect(() => {
-      // const recogeDatos = (event) => {
-      //   recogeDatoDesdeD3js(event.target);
-      // }  
-      // const svgElement = d3.select(refToSvg.current);
-      // //JOIN DATA TO GEOMETRY
-      // let circles = null;
-      // circles = svgElement.selectAll("circle").data(datos, (d) => d);
-      // //EXIT
-      // circles.exit().remove();
-      // //UPDATE
-      // circles
-      //   .enter()
-      //   .append("circle")
-      //   .attr("cx", (d) => d[0])
-      //   .attr("cy", (d) => d[1]);
-      // //ENTER
-      // circles
-      //   .enter()
-      //   .append("circle")
-      //   .attr("cx", (d) => d[0])
-      //   .attr("cy", (d) => d[1])
-      //   .attr("r", 3)
-      //   .attr("fill", "black")
-      //   .on("click", recogeDatos);
-  
-      //Nuevo Codigo:
-  //https://observablehq.com/@d3/zoomable-scatterplot
       const k = height / width;
   
       const zoom = d3.zoom()
@@ -101,7 +73,7 @@ const DwgPad = forwardRef((data, referencia) => {
           .attr("stroke-linecap", "round");
   
       gDot.selectAll("path")
-        .data(datos, (d) => d)
+        .data(datosPadre, (d) => d)
         .join("path")
         .attr("d", d => `M${x(d[0])},${y(d[1])}h0`)
         .attr("stroke", 0);
@@ -131,9 +103,9 @@ const DwgPad = forwardRef((data, referencia) => {
       });
   
   
-    }, [datos]);
+    }, [datosPadre]);
     
-    return <svg viewBox={`0 0 ${width} ${height}`} ref={refToSvg} onChange={recogeDatoDesdeD3js}  />;
+    return <svg viewBox={`0 0 ${width} ${height}`} ref={refToSvg} onChange={enviaDatosAlPadre}  />;
   });
 
   export default DwgPad;
