@@ -49,7 +49,7 @@ const estadoInicial =    {
         Padding_dwgForm: [0, 0, 0, 0],
     },
     Undo: [],
-    SeleccCurr: [],
+    CurrSelection: [],
     RefPoint: [0, 0, 0]
 }
 

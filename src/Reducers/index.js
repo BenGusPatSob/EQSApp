@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import c from '../Actions/Constants';
+import select from '../Store';
 
 export const isDrawing = (state = {}, action) => {
     const {type, payload} = action;
@@ -7,8 +8,8 @@ export const isDrawing = (state = {}, action) => {
     switch (type){
         case c.ADD_POINT:
             const {payload: punto} = payload;
-            const nuevoEstado = { ...state };
-            nuevoEstado.Seccion.Entidades.Puntos = [...nuevoEstado.Seccion.Entidades.Puntos, punto];
+            // const nuevoEstado = { ...state };
+            // nuevoEstado.Seccion.Entidades.Puntos = [...nuevoEstado.Seccion.Entidades.Puntos, punto];
         default:
             return state;
     }
